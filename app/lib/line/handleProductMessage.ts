@@ -40,6 +40,6 @@ export async function handleProductMessage({ messageId, productName, groupId, ti
        timestamp = VALUES(timestamp),
        img_id = VALUES(img_id),
        notion_database_id = VALUES(notion_database_id)`,
-    [messageId, groupId, productName, timestamp, isImage ? quotedMessageId : null, tableBlock.results[0].id]
+    [messageId, groupId, productName, timestamp, isImage ? quotedMessageId : null, tableBlock?.results[0]?.id as string]
   );
 }
