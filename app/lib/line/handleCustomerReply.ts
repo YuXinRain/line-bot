@@ -28,7 +28,6 @@ export async function handleCustomerReply({
   if (!productName) return;
 
   const userData = await fetchProfile(userId);
-  console.log("rows from DB:", rows);
-  console.log("userData from Line:", userData);
+  
   await addRowToTable(notionDatabaseId as string, [userData?.displayName as string, text, ""]);
 }
