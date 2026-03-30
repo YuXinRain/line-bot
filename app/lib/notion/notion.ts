@@ -7,7 +7,7 @@ export const notion = new Client({
 /**
  * 建立 Notion Database
  */
-export async function createDatabase(parentPageId) {
+export async function createDatabase(parentPageId: string) {
   try {
     const response = await notion.databases.create({
       is_inline: true,
@@ -49,7 +49,7 @@ export async function createDatabase(parentPageId) {
 /**
  * 建立 Notion Page（新增資料）
  */
-export async function createPage(databaseId, properties, imageUrl) {
+export async function createPage(databaseId: string, properties: any, imageUrl: string) {
   try {
     const response = await notion.pages.create({
       parent: { database_id: databaseId },
@@ -72,7 +72,7 @@ export async function createPage(databaseId, properties, imageUrl) {
   }
 }
 
-export async function addTableToPage(pageId) {
+export async function addTableToPage(pageId: string) {
   try {
     const response = await notion.blocks.children.append({
       block_id: pageId,
@@ -109,7 +109,7 @@ export async function addTableToPage(pageId) {
   }
 }
 
-export async function addRowToTable(tableBlockId, rowData) {
+export async function addRowToTable(tableBlockId: string, rowData: string[]) {
   // rowData = ["小明", "5", "500"]
   try {
     await notion.blocks.children.append({
@@ -119,7 +119,7 @@ export async function addRowToTable(tableBlockId, rowData) {
           object: "block",
           type: "table_row",
           table_row: {
-            cells: rowData.map(cell => [{ type: "text", text: { content: cell } }])
+            cells: rowData.map((cell: string) => [{ type: "text", text: { content: cell } }])
           }
         }
       ]

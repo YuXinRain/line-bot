@@ -1,6 +1,6 @@
 import { client } from "@/lib/line/client";
 
-export async function fetchProfile(userId) {
+export async function fetchProfile(userId: string) {
   try {
     const profile = await client.getProfile(userId);
     return profile;

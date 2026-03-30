@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export async function getLineImage(messageId) {
+export async function getLineImage(messageId: string) {
   const res = await axios.get(
     `https://api-data.line.me/v2/bot/message/${messageId}/content`,
     {

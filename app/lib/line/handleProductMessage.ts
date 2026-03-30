@@ -1,10 +1,10 @@
-import pool from '../db/db';
-import { createPage, addTableToPage } from '../notion/notion';
-import { isQuotedMessageImage } from './isQuotedMessageImage';
-import { getLineImage } from './getLineImage';
-import { uploadImage } from '../cloudinary/cloudinary';
+import { pool } from '@/lib/db/db';
+import { createPage, addTableToPage } from '@/lib/notion/notion';
+import { isQuotedMessageImage } from '@/lib/line/isQuotedMessageImage';
+import { getLineImage } from '@/lib/line/getLineImage';
+import { uploadImage } from '@/lib/cloudinary/cloudinary';
 
-export async function handleProductMessage({ messageId, productName, groupId, timestamp, quotedMessageId, spec }) {
+export async function handleProductMessage({ messageId, productName, groupId, timestamp, quotedMessageId, spec }: { messageId: string, productName: string, groupId: string, timestamp: string, quotedMessageId: string, spec: string }) {
 
   const isImage = await isQuotedMessageImage(quotedMessageId);
 
@@ -24,7 +24,7 @@ export async function handleProductMessage({ messageId, productName, groupId, ti
 
   const imageUrl = await uploadImage(imageBuffer);
   // 建立 Notion Page
-  const productPage = await createPage(process.env.NOTION_DB_ID, properties, imageUrl);
+  const productPage = await createPage(process.env.NOTION_DB_ID as string, properties, imageUrl as string);
   if(!productPage) return;  
 
   // 建立此 Page 的 Notion Database

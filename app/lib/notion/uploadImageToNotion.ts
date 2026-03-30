@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export async function uploadImageToNotion(imageBuffer) {
+export async function uploadImageToNotion(imageBuffer: Buffer) {
 
   // 1️⃣ 建立 upload
   const upload = await axios.post(

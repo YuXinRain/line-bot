@@ -1,8 +1,8 @@
 import { handleProductMessage } from './handleProductMessage';
 import { handleCustomerReply } from './handleCustomerReply';
-import { getField } from '../utils/getField';
+import { getField } from '@/lib/utils/getField';
 
-export async function handleEvent(event) { 
+export async function handleEvent(event: any) { 
   try {
     // Bot 加入群組
     if (event.type === 'join') return;
@@ -12,8 +12,8 @@ export async function handleEvent(event) {
     const { userId, groupId } = event.source;
     const timestamp = event.timestamp;
     const quotedMessageId = event.message.quotedMessageId;
-    const productName = getField(text, '產品名稱');
-    const spec = getField(text, '規格');
+    const productName = getField(text as string, '產品名稱');
+    const spec = getField(text as string , '規格');
 
     // 商品發布
     if (productName && userId === process.env.TARGET_USER_ID) {
@@ -23,7 +23,7 @@ export async function handleEvent(event) {
         groupId,
         timestamp,
         quotedMessageId,
-        spec
+        spec: spec as string
         });
     }
 

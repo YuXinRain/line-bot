@@ -1,7 +1,7 @@
 import { fetchProfile } from "@/lib/line/fetchProfile";
 import { handleEvent } from "@/lib/line/handleEvent";
 
-export async function POST(request) {
+export async function POST(request: Request) {
   const body = await request.json();
   const events = body.events || [];
 

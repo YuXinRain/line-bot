@@ -1,8 +1,8 @@
-import pool from '../db/db';
-import { addRowToTable } from '../notion/notion';
-import { fetchProfile } from './fetchProfile';
+import { pool } from '@/lib/db/db';
+import { addRowToTable } from '@/lib/notion/notion';
+import { fetchProfile } from '@/lib/line/fetchProfile';
 
-export async function handleCustomerReply({ text, quotedMessageId, userId }) {
+export async function handleCustomerReply({ text, quotedMessageId, userId }: { text: string, quotedMessageId: string, userId: string }) {
 
   const [rows] = await pool.execute(
     `SELECT title, notion_database_id

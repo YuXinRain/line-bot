@@ -7,13 +7,13 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-export async function uploadImage(imageBuffer) {
+export async function uploadImage(imageBuffer: Buffer) {
   return new Promise((resolve, reject) => {
     const stream = cloudinary.uploader.upload_stream(
       {
         folder: "line-products",
       },
-      (error, result) => {
+      (error: Error | undefined, result: any) => {
         if (result) resolve(result.secure_url);
         else reject(error);
       }

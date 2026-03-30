@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export async function isQuotedMessageImage(quotedId) {
+export async function isQuotedMessageImage(quotedId: string) {
   try {
     const res = await axios.get(
       `https://api-data.line.me/v2/bot/message/${quotedId}/content`,
