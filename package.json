@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@line/bot-sdk": "^10.6.0",
+    "@notionhq/client": "^5.15.0",
     "axios": "^1.14.0",
     "cloudinary": "^2.9.0",
     "mysql2": "^3.20.0",
