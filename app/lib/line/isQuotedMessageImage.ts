@@ -9,10 +9,8 @@ export async function isQuotedMessageImage(quotedId: string) {
         responseType: 'arraybuffer', // 回傳 binary
       }
     );
-
     // LINE API 會在 header 回傳 Content-Type
     const contentType = res.headers['content-type'];
-    
     // 判斷是不是圖片
     if (contentType.startsWith('image/')) {
       return true;

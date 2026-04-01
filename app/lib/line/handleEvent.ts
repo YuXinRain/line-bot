@@ -14,7 +14,6 @@ export async function handleEvent(event: any) {
     const quotedMessageId = event.message.quotedMessageId;
     const productName = getField(text as string, '產品名稱');
     const spec = getField(text as string , '規格');
-
     // 商品發布
     if (productName && userId === process.env.TARGET_USER_ID) {
       await handleProductMessage({

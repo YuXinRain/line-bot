@@ -7,7 +7,6 @@ import { uploadImage } from '@/lib/cloudinary/cloudinary';
 export async function handleProductMessage({ messageId, productName, groupId, timestamp, quotedMessageId, spec }: { messageId: string, productName: string, groupId: string, timestamp: string, quotedMessageId: string, spec: string }) {
 
   const isImage = await isQuotedMessageImage(quotedMessageId);
-
   const properties = {
     '產品名稱': { title: [{ text: { content: productName } }] },
     '日期': { date: { start: new Date(timestamp).toISOString() } },
