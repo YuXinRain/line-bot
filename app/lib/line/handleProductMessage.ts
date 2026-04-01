@@ -31,15 +31,24 @@ export async function handleProductMessage({ messageId, productName, groupId, ti
   const tableBlock = await addTableToPage(productPage.id);
   
   // 寫進資料庫
-  await pool.execute(
-    `INSERT INTO messages (id, group_id, title, timestamp, img_id, notion_database_id)
-     VALUES (?, ?, ?, ?, ?, ?)
-     ON DUPLICATE KEY UPDATE
-       id = VALUES(id),
-       group_id = VALUES(group_id),
-       timestamp = VALUES(timestamp),
-       img_id = VALUES(img_id),
-       notion_database_id = VALUES(notion_database_id)`,
-    [messageId, groupId, productName, timestamp, isImage ? quotedMessageId : null, tableBlock?.results[0]?.id as string]
+  await pool.query(
+    `
+    INSERT INTO messages (id, group_id, title, timestamp, img_id, notion_database_id)
+    VALUES ($1, $2, $3, $4, $5, $6)
+    ON CONFLICT (id) DO UPDATE SET
+      group_id = EXCLUDED.group_id,
+      title = EXCLUDED.title,
+      timestamp = EXCLUDED.timestamp,
+      img_id = EXCLUDED.img_id,
+      notion_database_id = EXCLUDED.notion_database_id
+    `,
+    [
+      messageId,
+      groupId,
+      productName,
+      timestamp,
+      isImage ? quotedMessageId : null,
+      tableBlock?.results[0]?.id as string
+    ]
   );
 }

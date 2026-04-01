@@ -1,7 +1,6 @@
 import { pool } from '@/lib/db/db';
 import { addRowToTable } from '@/lib/notion/notion';
 import { fetchProfile } from '@/lib/line/fetchProfile';
-import { RowDataPacket } from 'mysql2'; // <-- 引入 RowDataPacket
 
 export async function handleCustomerReply({
   text,
@@ -12,16 +11,15 @@ export async function handleCustomerReply({
   quotedMessageId: string;
   userId: string;
 }) {
-  // 明確告訴 TypeScript 回傳的 rows 是 RowDataPacket[]
-  const [rows] = await pool.execute<RowDataPacket[]>(
+  const result = await pool.query(
     `SELECT title, notion_database_id
-     FROM messages 
-     WHERE id = ? OR img_id = ? 
+     FROM messages
+     WHERE id = $1 OR img_id = $2
      LIMIT 1`,
     [quotedMessageId, quotedMessageId]
   );
+  const rows = result.rows;
 
-  // 現在 rows.length 不會再報錯
   const productName = rows.length ? rows[0].title : null;
   const notionDatabaseId = rows.length ? rows[0].notion_database_id : null;
 
