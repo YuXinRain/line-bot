@@ -13,11 +13,12 @@ export async function handleCustomerReply({
 }) {
   const result = await pool.query(
     `SELECT title, notion_database_id
-     FROM messages
+     FROM products
      WHERE id = $1 OR img_id = $2
      LIMIT 1`,
     [quotedMessageId, quotedMessageId]
   );
+
   const rows = result.rows;
 
   const productName = rows.length ? rows[0].title : null;

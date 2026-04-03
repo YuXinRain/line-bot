@@ -31,15 +31,22 @@ export async function handleProductMessage({ messageId, productName, groupId, ti
   const timestampISO = new Date(Number(timestamp)).toISOString(); 
   // 寫進資料庫
   await pool.query(
-    `INSERT INTO messages (id, group_id, title, timestamp, img_id, notion_database_id)
+    `INSERT INTO products (id, group_id, title, created_at, img_id, notion_database_id)
      VALUES ($1, $2, $3, $4, $5, $6)
      ON CONFLICT (id) DO UPDATE SET
        group_id = EXCLUDED.group_id,
        title = EXCLUDED.title,
-       timestamp = EXCLUDED.timestamp,
+       created_at = EXCLUDED.created_at,
        img_id = EXCLUDED.img_id,
        notion_database_id = EXCLUDED.notion_database_id
     `,
-    [messageId, groupId, productName, timestampISO, isImage ? quotedMessageId : null, tableBlock?.results[0]?.id as string]
+    [
+      messageId,
+      groupId,
+      productName,
+      timestampISO,
+      isImage ? quotedMessageId : null,
+      tableBlock?.results[0]?.id as string
+    ]
   );
 }
