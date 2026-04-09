@@ -56,7 +56,7 @@ export async function handleEvent(event: any) {
     // const productName = getField(text as string, '產品名稱');
     // const spec = getField(text as string , '規格');
     // 商品發布 有引用圖片才做處理
-    if (text && userId === process.env.TARGET_USER_ID) {
+    if (text && (userId === process.env.TARGET_USER_ID || userId === process.env.TARGET_USER_ID_SECOND)) {
       await handleProductMessage({
         messageId,
         text,
@@ -67,7 +67,7 @@ export async function handleEvent(event: any) {
     }
 
     // 客人 +1
-    if (text && userId !== process.env.TARGET_USER_ID) {
+    if (text && userId !== process.env.TARGET_USER_ID && userId !== process.env.TARGET_USER_ID_SECOND) {
       await handleCustomerReply({
         text,
         quotedMessageId,
