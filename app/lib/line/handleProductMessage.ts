@@ -6,18 +6,18 @@ import { uploadImage } from '@/lib/cloudinary/cloudinary';
 import { getTitleAndPrice } from '../utils/getTitleAndPrice';
 
 export async function handleProductMessage({ messageId, text, groupId, timestamp, quotedMessageId }: { messageId: string, text: string, groupId: string, timestamp: string, quotedMessageId: string }) {
+  const isImage = await isQuotedMessageImage(quotedMessageId);
+  if (!isImage) return;
   const result = await getTitleAndPrice(text);
   const resultJson = JSON.parse(result as string);
   if(!resultJson) return;
   
-  const isImage = await isQuotedMessageImage(quotedMessageId);
   const properties = {
     '產品名稱': { title: [{ text: { content: resultJson?.title } }] },
     '日期': { date: { start: new Date(timestamp).toISOString() } },
     '售價': { rich_text: [{ text: { content: resultJson?.price } }] }
   };
   
-  if (!isImage) return;
   const imageBuffer = await getLineImage(quotedMessageId);
   const imageUrl = await uploadImage(imageBuffer);
   // 建立 Notion Page

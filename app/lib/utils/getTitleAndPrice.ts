@@ -22,9 +22,9 @@ export async function getTitleAndPrice(productText: string) {
   `;
 
   const response = await openai.chat.completions.create({
-    model: "gpt-4o-mini",  // 最便宜 GPT-4 模型
+    model: "gpt-4o-mini",  
     messages: [{ role: "user", content: prompt }],
-    temperature: 0,        // 越低越精準
+    temperature: 0,       
   });
 
   const output = response.choices[0].message.content;
