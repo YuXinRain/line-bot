@@ -1,6 +1,6 @@
 import { handleProductMessage } from './handleProductMessage';
 import { handleCustomerReply } from './handleCustomerReply';
-import { getField } from '@/lib/utils/getField';
+// import { getField } from '@/lib/utils/getField';
 import { getGroupName } from './getGroupName';
 import { pool } from '../db/db';
 
@@ -52,22 +52,22 @@ export async function handleEvent(event: any) {
     }
     const timestamp = event.timestamp;
     const quotedMessageId = event.message.quotedMessageId;
-    const productName = getField(text as string, '產品名稱');
-    const spec = getField(text as string , '規格');
-    // 商品發布
-    if (productName && userId === process.env.TARGET_USER_ID) {
+    if(!quotedMessageId) return;
+    // const productName = getField(text as string, '產品名稱');
+    // const spec = getField(text as string , '規格');
+    // 商品發布 有引用圖片才做處理
+    if (text && userId === process.env.TARGET_USER_ID) {
       await handleProductMessage({
         messageId,
-        productName,
+        text,
         groupId,
         timestamp,
         quotedMessageId,
-        spec: spec as string
       });
     }
 
     // 客人 +1
-    if (!productName) {
+    if (text && userId !== process.env.TARGET_USER_ID) {
       await handleCustomerReply({
         text,
         quotedMessageId,

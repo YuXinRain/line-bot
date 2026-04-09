@@ -3,24 +3,22 @@ import { createPage, addTableToPage } from '@/lib/notion/notion';
 import { isQuotedMessageImage } from '@/lib/line/isQuotedMessageImage';
 import { getLineImage } from '@/lib/line/getLineImage';
 import { uploadImage } from '@/lib/cloudinary/cloudinary';
+import { getTitleAndPrice } from '../utils/getTitleAndPrice';
 
-export async function handleProductMessage({ messageId, productName, groupId, timestamp, quotedMessageId, spec }: { messageId: string, productName: string, groupId: string, timestamp: string, quotedMessageId: string, spec: string }) {
-
+export async function handleProductMessage({ messageId, text, groupId, timestamp, quotedMessageId }: { messageId: string, text: string, groupId: string, timestamp: string, quotedMessageId: string }) {
+  const result = await getTitleAndPrice(text);
+  const resultJson = JSON.parse(result as string);
+  if(!resultJson) return;
+  
   const isImage = await isQuotedMessageImage(quotedMessageId);
   const properties = {
-    '產品名稱': { title: [{ text: { content: productName } }] },
+    '產品名稱': { title: [{ text: { content: resultJson?.title } }] },
     '日期': { date: { start: new Date(timestamp).toISOString() } },
-    '售價': { rich_text: [{ text: { content: spec } }] }
+    '售價': { rich_text: [{ text: { content: resultJson?.price } }] }
   };
-    
-  let imageBuffer;
-
-  if (isImage) {
-    imageBuffer = await getLineImage(quotedMessageId);
-  } else {
-    imageBuffer = null;
-  }
-
+  
+  if (!isImage) return;
+  const imageBuffer = await getLineImage(quotedMessageId);
   const imageUrl = await uploadImage(imageBuffer);
   // 建立 Notion Page
   const productPage = await createPage(process.env.NOTION_DB_ID as string, properties, imageUrl as string);
@@ -43,7 +41,7 @@ export async function handleProductMessage({ messageId, productName, groupId, ti
     [
       messageId,
       groupId,
-      productName,
+      resultJson?.title,
       timestampISO,
       isImage ? quotedMessageId : null,
       tableBlock?.results[0]?.id as string
